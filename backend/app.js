@@ -2,13 +2,20 @@ const express = require('express');
 const app = express();
 const PORT = 3000;
 
+const TICKER_PATTERN = /^[A-Z0-9^][A-Z0-9.=^-]{0,14}$/;
+
 // routes
 app.get('/health', (req, res) => {
   res.send('Server is healthy');
 });
 
 app.get('/intraday/:ticker', async (req, res) => {
-  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(req.params.ticker)}?interval=15m&range=1mo`;
+  const ticker = req.params.ticker.toUpperCase();
+  if (!TICKER_PATTERN.test(ticker)) {
+    return res.status(400).json({ error: `Invalid ticker symbol: ${req.params.ticker}` });
+  }
+
+  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=15m&range=1mo`;
   const response = await fetch(url, {
     headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
   });
@@ -43,6 +50,10 @@ app.get('/intraday/:ticker', async (req, res) => {
   );
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+  });
+}
+
+module.exports = app;

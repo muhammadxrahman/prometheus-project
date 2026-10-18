@@ -1,4 +1,4 @@
-
+Using Claude Code Opus 5.5 Medium
 
 Prompt
 Consider the following 3rd party endpoint call:
@@ -21,3 +21,22 @@ I had a simple backend folder with npm init and express installed. Just a simple
 
 Output Decision 
 Took the 34 lines for GET /intraday/:ticker as it meets the viable standard for req/res
+
+
+Prompt
+Slot a validator in the get ticker request, right before the fetch. It's not feasible to give a list of couple thousands of valid stock symbols, so instead implement a validation that checks for conventations of a symbol name being met. Additionally, inside /backend/tests create a simple test script with a valid request and an unvalid.
+
+Note
+Need to check request param validity before Yahoo API is hit; not feasible to store thousands of symbols that get listed/delisted. Regex expressions can help here
+
+Output Decision
+The output regex is too strict:
+```
+const TICKER_PATTERN = /^[A-Z]{1,5}([.-][A-Z]{1,2})?$/;
+```
+Indices like 'GSPC will get rejected.
+Replaced with
+```
+const TICKER_PATTERN = /^[A-Z0-9^][A-Z0-9.=^-]{0,14}$/;
+```
+
