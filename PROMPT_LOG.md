@@ -47,3 +47,12 @@ Why: Project expects TypeScript on frontend. Unifying the language on the backen
 
 Outcome: Accepted the change after tests passing. Early language decisions avoid messes down the road.
 
+## 4. Caching plan
+Prompt:
+```text
+Read the current app.ts. Task: extract the fetch, parse, and aggregate logic into getIntraday(ticker) with no behavior change, then wrap it with an lru-cache instance using fetch() so concurrent identical requests share one upstream call. Constraints: key is ticker:1mo:15m, cache aggregated rows only, TTL and max from env with defaults of 5 minutes and 500, do not cache failures, add an X-Cache header. Out of scope: Redis, cache interface, negative caching, rate limiting, new routes. Acceptance: existing tests pass unchanged, plus tests for sequential hit, concurrent single call, failure not cached, and TTL expiry. Give me a plan first.
+```
+
+Why: This is over engineering becomes an issue, especially when using an LLM to implement production-ready features. I want to constrain what is implemented when my goal is a simple cache of requested symbols based on the time. 
+
+Outcome: Accepted the applied logic. It should be noted as I still need to work on understanding race conditions. As I understand, the first request claims the cache slot with its in-flight promise before it yields at await. Later requests for the same key find that claim and wait on the same promise instead of starting their own Yahoo call.
