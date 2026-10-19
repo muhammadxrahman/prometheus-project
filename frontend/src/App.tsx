@@ -1,5 +1,7 @@
+import IntradayPage from './pages/IntradayPage'
+
 function App() {
-  return <h1>Stock Tracker</h1>
+  return <IntradayPage />
 }
 
 export default App

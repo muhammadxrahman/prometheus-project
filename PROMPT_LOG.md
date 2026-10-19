@@ -129,12 +129,12 @@ Outcome: Accepted the pages.
 
 ##
 ```text
-
+Import the Bootstrap library in main.tsx. Implement a single IntradayPage.tsx page in frontend/src/pages. Use frontend/src/components to hold: 1. the request form with quick format checking and input cleaning. 2. a table to display the data. 3. an error alert for error messages. App.tsx will hold IntradayPage.tsx
 ```
 
-Why:
+Why: This is the part where we start adding the real content. Admittedly, frontend is not my strong suit outside of setting up states, helper functions, and API setup. This prompt is to address all of that into patching a single page that's broken down with components and helpers. The idea is that we need to break it part so that it's easier to add to later.
 
-Outcome:
+Outcome: 
 
 ##
 ```text
