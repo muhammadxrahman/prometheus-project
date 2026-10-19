@@ -109,7 +109,7 @@ src/
 I decided to skip frontend automation tests and focus on unit testing the API. Vite dev proxy was proposed for communication, but simple CORS would be viable for this scope.
 
 
-## Implementing calls to backend
+## 9. Implementing calls to backend
 ```text
 For now, implement the API, open the backend CORS policy, and add unit testing on the frontend calls. We will add the page and content after this is verified.
 ```
@@ -118,7 +118,7 @@ Why: Basing on the output plan of the last prompt, I wanted to build it in parts
 
 Outcome: Accepted the changes, but saw that the CORS policy accepted all methods, not just GET. 
 
-##
+## 10. Cleanup of frontend and CORS fix
 ```text
 Go ahead and lock down to only GET requests on the backend CORS rules. Additionally, clean up the demo assets and files that were added by the npm create vite command.
 ```
@@ -127,14 +127,23 @@ Why: Lock down of the CORS policy. Cleaning of demo assets so that we have a lig
 
 Outcome: Accepted the pages.
 
-##
+## 11. Oneshotting main page and helpers
 ```text
 Import the Bootstrap library in main.tsx. Implement a single IntradayPage.tsx page in frontend/src/pages. Use frontend/src/components to hold: 1. the request form with quick format checking and input cleaning. 2. a table to display the data. 3. an error alert for error messages. App.tsx will hold IntradayPage.tsx
 ```
 
 Why: This is the part where we start adding the real content. Admittedly, frontend is not my strong suit outside of setting up states, helper functions, and API setup. This prompt is to address all of that into patching a single page that's broken down with components and helpers. The idea is that we need to break it part so that it's easier to add to later.
 
-Outcome: 
+Outcome: Accepted the changes as is after testing manually.
+
+## Implementing a chart view
+```text
+Implement a chart view for the page. Let it be that the user can switch between the table and the chart. Go for a shaded band between low avg and high avg for each day that show the daily range and its trend, volume bars along the bottom on their own axis, and a tooltip showing all three values for the day under the cursor.
+```
+
+Why:
+
+Outcome:
 
 ##
 ```text

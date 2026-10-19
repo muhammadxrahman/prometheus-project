@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import { ApiError, fetchIntraday, type IntradayRow } from '../api/intraday'
 import ErrorAlert from '../components/ErrorAlert'
+import IntradayChart from '../components/IntradayChart'
 import IntradayTable from '../components/IntradayTable'
 import TickerForm from '../components/TickerForm'
+import ViewToggle, { type ResultView } from '../components/ViewToggle'
 
 type RequestState =
   | { status: 'idle' }
@@ -12,6 +14,8 @@ type RequestState =
 
 function IntradayPage() {
   const [state, setState] = useState<RequestState>({ status: 'idle' })
+  // kept across searches so the reader's choice sticks
+  const [view, setView] = useState<ResultView>('chart')
   const controllerRef = useRef<AbortController | null>(null)
 
   // cancel any request still running when the page goes away
@@ -51,7 +55,24 @@ function IntradayPage() {
             onDismiss={() => setState({ status: 'idle' })}
           />
         )}
-        {state.status === 'success' && <IntradayTable ticker={state.ticker} rows={state.rows} />}
+        {state.status === 'success' && state.rows.length === 0 && (
+          <p className="text-body-secondary">No trading data for {state.ticker} in the last month.</p>
+        )}
+        {state.status === 'success' && state.rows.length > 0 && (
+          <section aria-label={`${state.ticker} results`}>
+            <div className="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+              <h2 className="h6 mb-0">
+                {state.ticker} <span className="fw-normal text-body-secondary">· daily averages, last month</span>
+              </h2>
+              <ViewToggle value={view} onChange={setView} />
+            </div>
+            {view === 'chart' ? (
+              <IntradayChart ticker={state.ticker} rows={state.rows} />
+            ) : (
+              <IntradayTable ticker={state.ticker} rows={state.rows} />
+            )}
+          </section>
+        )}
       </div>
     </main>
   )
