@@ -5,6 +5,16 @@ Look up a stock ticker and see the last month of intraday trading summarized by 
 - **`backend/`**: Express + TypeScript API that fetches 15-minute bars from Yahoo Finance and aggregates them per trading day. It caches results, rate-limits clients, and returns JSON errors.
 - **`frontend/`**: React + TypeScript + Vite single-page app (Bootstrap, Recharts) that calls the backend.
 
+## Screenshots
+
+**Chart view:** each day's range from low average to high average, with daily volume in a separate panel below. Hovering a day shows all three values.
+
+![Chart view: TSLA daily low-to-high average band over the last month, with daily volume bars below](images/chartview.png)
+
+**Table view:** the same data as exact values.
+
+![Table view: TSLA daily low average, high average, and volume for each trading day over the last month](images/tableview.png)
+
 ## Requirements
 
 - Node.js **22.12 or newer** (22, 24, or 26; Vitest doesn't support 23 or 25)
