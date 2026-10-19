@@ -9,7 +9,7 @@ interface IntradayTableProps {
 function IntradayTable({ ticker, rows }: IntradayTableProps) {
   return (
     <div className="table-responsive">
-      <table className="table table-striped table-hover align-middle">
+      <table className="table table-striped table-hover align-middle mb-0">
         <caption className="visually-hidden">{ticker} daily averages of 15-minute bars over the last month</caption>
         <thead>
           <tr>

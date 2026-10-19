@@ -154,3 +154,11 @@ Why: This is were LLMs shine. Taking the package.json scripts and API setups, Cl
 
 Outcome: Accepted the README output.
 
+## 14. Frontend UI polish
+```text
+Implement a light gray background with white cards so sections stand apart instead of floating on white. Implement a header showing "Stock Tracker" with the description underneath. Add example ticker buttons for AAPL, MSFT, TSLA, ^GSPC that fill the input and search right away. Add a footer with a disclaimer on the Yahoo finance data on 15-minute bars and that rows may be partial while market is open.
+```
+
+Why: Some final UI touches to make it look nicer. By specifying what to add, it avoids going information overload. 
+
+Outcome: The resulting frontend is very polished and avoids going out of scope. With a pass of the test suite, we can confirm that the project is clean to date.
