@@ -136,29 +136,21 @@ Why: This is the part where we start adding the real content. Admittedly, fronte
 
 Outcome: Accepted the changes as is after testing manually.
 
-## Implementing a chart view
+## 12. Implementing a chart view
 ```text
 Implement a chart view for the page. Let it be that the user can switch between the table and the chart. Go for a shaded band between low avg and high avg for each day that show the daily range and its trend, volume bars along the bottom on their own axis, and a tooltip showing all three values for the day under the cursor.
 ```
 
-Why:
+Why: Chart building on the frontend seems very confusing, and I'm not familiar with the right tools. By instead focusing on what I want it to look like, the LLM can find a matching library that implements the specs I've chosen.
 
-Outcome:
+Outcome: Accepted the chart addition using Recharts and verified that it looks nice. Trending line chart on top and a volume bar on the bottom with labeling. Honestly looks beautiful to me.
 
-##
+## 13. README directions
 ```text
-
+Fill the root level README with setup information of both the frontend and backend. Avoid docker-compose as it's very light at the moment. Also denote the configurable rate limiting.
 ```
 
-Why:
+Why: This is were LLMs shine. Taking the package.json scripts and API setups, Claude or any LLM can reiterate the setup of servers and configurable values. It also looks at dependencies used by the project to consider what may be forgotten such as Node.js versions. 
 
-Outcome:
+Outcome: Accepted the README output.
 
-##
-```text
-
-```
-
-Why:
-
-Outcome:
