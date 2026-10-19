@@ -28,13 +28,14 @@ test('error responses carry CORS headers so the frontend can read them', async (
   assert.strictEqual(res.headers.get('Access-Control-Allow-Origin'), FRONTEND);
 });
 
-test('preflight requests are answered without reaching the route', async () => {
+test('preflight requests are answered without reaching the route and allow only GET', async () => {
   const res = await fetch(`${baseUrl}/intraday/TSLA`, {
     method: 'OPTIONS',
     headers: { Origin: FRONTEND, 'Access-Control-Request-Method': 'GET' },
   });
   assert.strictEqual(res.status, 204);
   assert.strictEqual(res.headers.get('Access-Control-Allow-Origin'), FRONTEND);
+  assert.strictEqual(res.headers.get('Access-Control-Allow-Methods'), 'GET');
 });
 
 test('other origins are not allowed', async () => {

@@ -84,3 +84,72 @@ Address any possible errors remaining that could come from the Yahoo api and add
 Why: Looking to add final pieces of errors to be addressed and parsed into JSON for the frontend to read. These include DNS network issues that I just had when I was CURL testing. Yahoo-specific rate limiting instead of just our own rate limiting needs to be addressed as well.
 
 Outcome: Accepted the additions and validated that the new tests pass.
+
+## 8. Frontend plan
+```text
+Take a look at /frontend that was built with npm create vite with react. I propose Bootstrap for CSS. Prioritize maintainability so don't look at app.tsx for the content but rather another file that'll hold this and be pointed to. For now plan a single page frontend that will make requests to our backend.
+```
+
+Why: Frontend design, especially CSS isn't my strong suit. By deliberating a plan of attack for a single page, we get to address the main goals first before we get into the styling. 
+
+Outcome: Plain old Bootstrap and the following src/ structure were proposed:
+```
+src/
+  main.tsx                    Bootstrap CSS import + <App />
+  App.tsx                     shell only: <IntradayPage />
+  pages/IntradayPage.tsx      lays out the page, owns no fetch logic
+  components/
+    TickerForm.tsx            input + submit, uppercases, quick format check
+    IntradayTable.tsx         rows → table, number formatting, empty state
+    ErrorAlert.tsx            Bootstrap alert for an error message
+  hooks/useIntraday.ts        request state: idle | loading | success | error
+  api/intraday.ts             fetchIntraday(ticker, signal), ApiError, IntradayRow type
+
+```
+I decided to skip frontend automation tests and focus on unit testing the API. Vite dev proxy was proposed for communication, but simple CORS would be viable for this scope.
+
+
+## Implementing calls to backend
+```text
+For now, implement the API, open the backend CORS policy, and add unit testing on the frontend calls. We will add the page and content after this is verified.
+```
+
+Why: Basing on the output plan of the last prompt, I wanted to build it in parts so that I can follow along easily without large chunks being unreviewed.
+
+Outcome: Accepted the changes, but saw that the CORS policy accepted all methods, not just GET. 
+
+##
+```text
+Go ahead and lock down to only GET requests on the backend CORS rules. Additionally, clean up the demo assets and files that were added by the npm create vite command.
+```
+
+Why: Lock down of the CORS policy. Cleaning of demo assets so that we have a lightweight bundle.
+
+Outcome: Accepted the pages.
+
+##
+```text
+
+```
+
+Why:
+
+Outcome:
+
+##
+```text
+
+```
+
+Why:
+
+Outcome:
+
+##
+```text
+
+```
+
+Why:
+
+Outcome:
