@@ -1,8 +1,17 @@
+import cors from 'cors';
 import express, { type ErrorRequestHandler } from 'express';
 import { rateLimit } from 'express-rate-limit';
 import { LRUCache } from 'lru-cache';
 
 const app = express();
+
+// first, so 429s and error responses carry CORS headers too and the browser lets the frontend read them
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN ?? 'http://localhost:5173',
+    exposedHeaders: ['Retry-After'],
+  })
+);
 
 const TICKER_PATTERN = /^[A-Z0-9^][A-Z0-9.=^-]{0,14}$/;
 
