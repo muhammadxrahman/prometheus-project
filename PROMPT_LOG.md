@@ -75,3 +75,12 @@ Implement a simple rate limiter on our get /intraday/:ticker that's configurable
 Why: Need a way to stop constant requests from the same IP. A rate limiter should be usable as a dependency on the endpoint function. I specifically asked for it to be done on this request and not globally because I don't want to limit /health for now. Otherwise, I would extract it as a configurable class with specified limits per request. 
 
 Outcome: Output came as a helper function of express-rate-limit setup that is passed into the GET request as a dependency. I changed it to 10 requests per minute. intradayRateLimit can be reused for the same limits for any extra endpoints on symbols, but for now we're good.
+
+## 7. Last minute error handling, frontend prep
+```text
+Address any possible errors remaining that could come from the Yahoo api and add graceful handling on the backend. Once that is completed we will open up the middleware for the frontend to make requests.
+```
+
+Why: Looking to add final pieces of errors to be addressed and parsed into JSON for the frontend to read. These include DNS network issues that I just had when I was CURL testing. Yahoo-specific rate limiting instead of just our own rate limiting needs to be addressed as well.
+
+Outcome: Accepted the additions and validated that the new tests pass.

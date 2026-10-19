@@ -45,11 +45,12 @@ test('concurrent requests share one upstream call', async () => {
 
 test('upstream failures are not cached', async () => {
   const calls = fakeYahoo({ status: 500 }, { status: 200 });
+  mock.method(console, 'error', () => {});
 
   const failed = await fetch(`${baseUrl}/intraday/FAIL`);
-  assert.strictEqual(failed.status, 500);
+  assert.strictEqual(failed.status, 502);
   assert.strictEqual(failed.headers.get('X-Cache'), 'MISS');
-  assert.deepStrictEqual(await failed.json(), { code: 'Internal' });
+  assert.deepStrictEqual(await failed.json(), { error: 'Market data provider returned an error' });
 
   const retried = await fetch(`${baseUrl}/intraday/FAIL`);
   assert.strictEqual(retried.status, 200);

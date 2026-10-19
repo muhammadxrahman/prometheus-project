@@ -26,7 +26,7 @@ test('slow upstream response returns 504 and is not cached', async () => {
   const timedOut = await fetch(`${baseUrl}/intraday/SLOW`);
   assert.strictEqual(timedOut.status, 504);
   assert.strictEqual(timedOut.headers.get('X-Cache'), 'MISS');
-  assert.deepStrictEqual(await timedOut.json(), { error: 'Upstream request timed out' });
+  assert.deepStrictEqual(await timedOut.json(), { error: 'Market data provider timed out' });
 
   const retried = await fetch(`${baseUrl}/intraday/SLOW`);
   assert.strictEqual(retried.status, 200);
@@ -38,5 +38,5 @@ test('stalled upstream body returns 504', async () => {
 
   const res = await fetch(`${baseUrl}/intraday/STALL`);
   assert.strictEqual(res.status, 504);
-  assert.deepStrictEqual(await res.json(), { error: 'Upstream request timed out' });
+  assert.deepStrictEqual(await res.json(), { error: 'Market data provider timed out' });
 });
