@@ -68,6 +68,7 @@ Why: A timeout on responses from Yahoo hasn't been implemented yet. Any server s
 Outcome: Keeping the output as it's a simple try/catch implementation that throws the desired error. Tests are passing.
 
 ## 6. Ratelimiting GET /intraday/:ticker
+Prompt:
 ```text
 Implement a simple rate limiter on our get /intraday/:ticker that's configurable
 ```
@@ -77,6 +78,7 @@ Why: Need a way to stop constant requests from the same IP. A rate limiter shoul
 Outcome: Output came as a helper function of express-rate-limit setup that is passed into the GET request as a dependency. I changed it to 10 requests per minute. intradayRateLimit can be reused for the same limits for any extra endpoints on symbols, but for now we're good.
 
 ## 7. Last minute error handling, frontend prep
+Prompt:
 ```text
 Address any possible errors remaining that could come from the Yahoo api and add graceful handling on the backend. Once that is completed we will open up the middleware for the frontend to make requests.
 ```
@@ -86,6 +88,7 @@ Why: Looking to add final pieces of errors to be addressed and parsed into JSON 
 Outcome: Accepted the additions and validated that the new tests pass.
 
 ## 8. Frontend plan
+Prompt:
 ```text
 Take a look at /frontend that was built with npm create vite with react. I propose Bootstrap for CSS. Prioritize maintainability so don't look at app.tsx for the content but rather another file that'll hold this and be pointed to. For now plan a single page frontend that will make requests to our backend.
 ```
@@ -110,6 +113,7 @@ I decided to skip frontend automation tests and focus on unit testing the API. V
 
 
 ## 9. Implementing calls to backend
+Prompt:
 ```text
 For now, implement the API, open the backend CORS policy, and add unit testing on the frontend calls. We will add the page and content after this is verified.
 ```
@@ -119,6 +123,7 @@ Why: Basing on the output plan of the last prompt, I wanted to build it in parts
 Outcome: Accepted the changes, but saw that the CORS policy accepted all methods, not just GET. 
 
 ## 10. Cleanup of frontend and CORS fix
+Prompt:
 ```text
 Go ahead and lock down to only GET requests on the backend CORS rules. Additionally, clean up the demo assets and files that were added by the npm create vite command.
 ```
@@ -128,6 +133,7 @@ Why: Lock down of the CORS policy. Cleaning of demo assets so that we have a lig
 Outcome: Accepted the pages.
 
 ## 11. Oneshotting main page and helpers
+Prompt:
 ```text
 Import the Bootstrap library in main.tsx. Implement a single IntradayPage.tsx page in frontend/src/pages. Use frontend/src/components to hold: 1. the request form with quick format checking and input cleaning. 2. a table to display the data. 3. an error alert for error messages. App.tsx will hold IntradayPage.tsx
 ```
@@ -137,6 +143,7 @@ Why: This is the part where we start adding the real content. Admittedly, fronte
 Outcome: Accepted the changes as is after testing manually.
 
 ## 12. Implementing a chart view
+Prompt:
 ```text
 Implement a chart view for the page. Let it be that the user can switch between the table and the chart. Go for a shaded band between low avg and high avg for each day that show the daily range and its trend, volume bars along the bottom on their own axis, and a tooltip showing all three values for the day under the cursor.
 ```
@@ -146,6 +153,7 @@ Why: Chart building on the frontend seems very confusing, and I'm not familiar w
 Outcome: Accepted the chart addition using Recharts and verified that it looks nice. Trending line chart on top and a volume bar on the bottom with labeling. Honestly looks beautiful to me.
 
 ## 13. README directions
+Prompt:
 ```text
 Fill the root level README with setup information of both the frontend and backend. Avoid docker-compose as it's very light at the moment. Also denote the configurable rate limiting.
 ```
@@ -155,6 +163,7 @@ Why: This is were LLMs shine. Taking the package.json scripts and API setups, Cl
 Outcome: Accepted the README output.
 
 ## 14. Frontend UI polish
+Prompt:
 ```text
 Implement a light gray background with white cards so sections stand apart instead of floating on white. Implement a header showing "Stock Tracker" with the description underneath. Add example ticker buttons for AAPL, MSFT, TSLA, ^GSPC that fill the input and search right away. Add a footer with a disclaimer on the Yahoo finance data on 15-minute bars and that rows may be partial while market is open.
 ```
