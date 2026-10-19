@@ -1,4 +1,5 @@
 import express from 'express';
+import { rateLimit } from 'express-rate-limit';
 import { LRUCache } from 'lru-cache';
 
 const app = express();
@@ -101,12 +102,21 @@ const intradayCache = new LRUCache<string, IntradayRow[], string>({
   fetchMethod: (_key, _stale, { context }) => getIntraday(context),
 });
 
+// per-client (req.ip) fixed window; set app 'trust proxy' if deployed behind a proxy
+const intradayRateLimit = rateLimit({
+  windowMs: positiveIntFromEnv('INTRADAY_RATE_LIMIT_WINDOW_MS', 60 * 1000),
+  limit: positiveIntFromEnv('INTRADAY_RATE_LIMIT_MAX', 10),
+  standardHeaders: 'draft-8',
+  legacyHeaders: false,
+  message: { error: 'Too many requests, please try again later' },
+});
+
 // routes
 app.get('/health', (req, res) => {
   res.send('Server is healthy');
 });
 
-app.get('/intraday/:ticker', async (req, res) => {
+app.get<'/intraday/:ticker', { ticker: string }>('/intraday/:ticker', intradayRateLimit, async (req, res) => {
   const ticker = req.params.ticker.toUpperCase();
   if (!TICKER_PATTERN.test(ticker)) {
     return res.status(400).json({ error: `Invalid ticker symbol: ${req.params.ticker}` });

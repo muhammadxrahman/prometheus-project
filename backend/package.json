@@ -16,6 +16,7 @@
   "type": "module",
   "dependencies": {
     "express": "^5.3.0",
+    "express-rate-limit": "^8.7.1",
     "lru-cache": "^11.5.3"
   },
   "devDependencies": {

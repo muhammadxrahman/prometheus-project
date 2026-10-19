@@ -53,7 +53,7 @@ Prompt:
 Read the current app.ts. Task: extract the fetch, parse, and aggregate logic into getIntraday(ticker) with no behavior change, then wrap it with an lru-cache instance using fetch() so concurrent identical requests share one upstream call. Constraints: key is ticker:1mo:15m, cache aggregated rows only, TTL and max from env with defaults of 5 minutes and 500, do not cache failures, add an X-Cache header. Out of scope: Redis, cache interface, negative caching, rate limiting, new routes. Acceptance: existing tests pass unchanged, plus tests for sequential hit, concurrent single call, failure not cached, and TTL expiry. Give me a plan first.
 ```
 
-Why: This is over engineering becomes an issue, especially when using an LLM to implement production-ready features. I want to constrain what is implemented when my goal is a simple cache of requested symbols based on the time. 
+Why: Used a Sonnet 5.5 Medium chat to write out this prompt. This is where over engineering becomes an issue, especially when using an LLM to implement production-ready features. I want to constrain what is implemented when my goal is a simple cache of requested symbols based on the time. 
 
 Outcome: Accepted the applied logic. It should be noted as I still need to work on understanding race conditions. As I understand, the first request claims the cache slot with its in-flight promise before it yields at await. Later requests for the same key find that claim and wait on the same promise instead of starting their own Yahoo call.
 
@@ -66,3 +66,12 @@ Implement a timeout on getIntraday for Yahoo. Wrap the fetch and response.json()
 Why: A timeout on responses from Yahoo hasn't been implemented yet. Any server side issues from the third party need to be gracefully addressed with an error. Reusing helpers make it easier to maintain
 
 Outcome: Keeping the output as it's a simple try/catch implementation that throws the desired error. Tests are passing.
+
+## 6. Ratelimiting GET /intraday/:ticker
+```text
+Implement a simple rate limiter on our get /intraday/:ticker that's configurable
+```
+
+Why: Need a way to stop constant requests from the same IP. A rate limiter should be usable as a dependency on the endpoint function. I specifically asked for it to be done on this request and not globally because I don't want to limit /health for now. Otherwise, I would extract it as a configurable class with specified limits per request. 
+
+Outcome: Output came as a helper function of express-rate-limit setup that is passed into the GET request as a dependency. I changed it to 10 requests per minute. intradayRateLimit can be reused for the same limits for any extra endpoints on symbols, but for now we're good.
