@@ -45,12 +45,25 @@ function positiveIntFromEnv(name: string, fallback: number): number {
   return Number.isInteger(value) && value > 0 ? value : fallback;
 }
 
+const UPSTREAM_TIMEOUT_MS = positiveIntFromEnv('INTRADAY_UPSTREAM_TIMEOUT_MS', 8000);
+
 async function getIntraday(ticker: string): Promise<IntradayRow[]> {
   const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=15m&range=1mo`;
-  const response = await fetch(url, {
-    headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
-  });
-  const data = (await response.json()) as ChartResponse;
+  let response: Response;
+  let data: ChartResponse;
+  try {
+    // one signal covers both the request and reading the body
+    response = await fetch(url, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
+      signal: AbortSignal.timeout(UPSTREAM_TIMEOUT_MS),
+    });
+    data = (await response.json()) as ChartResponse;
+  } catch (err) {
+    if (err instanceof Error && err.name === 'TimeoutError') {
+      throw new UpstreamError(504, { error: 'Upstream request timed out' });
+    }
+    throw err;
+  }
   const result = data.chart?.result?.[0];
   if (!response.ok || !result) {
     throw new UpstreamError(response.status === 200 ? 502 : response.status, data.chart?.error ?? {});

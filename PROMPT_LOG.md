@@ -56,3 +56,13 @@ Read the current app.ts. Task: extract the fetch, parse, and aggregate logic int
 Why: This is over engineering becomes an issue, especially when using an LLM to implement production-ready features. I want to constrain what is implemented when my goal is a simple cache of requested symbols based on the time. 
 
 Outcome: Accepted the applied logic. It should be noted as I still need to work on understanding race conditions. As I understand, the first request claims the cache slot with its in-flight promise before it yields at await. Later requests for the same key find that claim and wait on the same promise instead of starting their own Yahoo call.
+
+## 5. Yahoo API timeouts
+Prompt:
+```text
+Implement a timeout on getIntraday for Yahoo. Wrap the fetch and response.json() with the helpers to return a 504 if the request times out. 8 sec default
+```
+
+Why: A timeout on responses from Yahoo hasn't been implemented yet. Any server side issues from the third party need to be gracefully addressed with an error. Reusing helpers make it easier to maintain
+
+Outcome: Keeping the output as it's a simple try/catch implementation that throws the desired error. Tests are passing.
